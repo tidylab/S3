@@ -39,8 +39,13 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: Set Up Session
+      - name: Prepare Session
         run: echo "utils::chooseCRANmirror(graphics=FALSE, ind = 1)" > .Rprofile
+        run: |
+          if(!'remotes' %in% rownames(utils::installed.packages())) utils::install.packages('remotes');
+          remotes::install_cran(c('devtools'));
+          devtools::document()
+        shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
