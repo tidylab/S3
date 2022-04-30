@@ -9,6 +9,9 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/S3)](https://CRAN.R-project.org/package=S3)
+[![Codecov test
+coverage](https://codecov.io/gh/tidylab/S3/branch/master/graph/badge.svg)](https://app.codecov.io/gh/tidylab/S3?branch=master)
+[![R-CMD-check](https://github.com/tidylab/S3/workflows/R-CMD-check/badge.svg)](https://github.com/tidylab/S3/actions)
 <!-- badges: end -->
 
 The goal of S3 is to …
