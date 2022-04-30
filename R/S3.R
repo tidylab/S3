@@ -3,10 +3,12 @@
 #' @description Implement a uniform interface to file system operations for AWS S3.
 #'
 #' @examples
+#' \dontrun{
 #' s3 <- S3$new(AWS_REGION = "ap-southeast-2")
+#' }
 #'
 #' @references
-#' This class is based on the idea behind the
+#' This class is based on the idea behind
 #' \href{https://fs.r-lib.org/reference/index.html}{`fs`}.
 #'
 #' @export
