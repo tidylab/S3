@@ -46,9 +46,8 @@ jobs:
                       writeLines('.libPaths(.libPaths()[which.min(nchar(.libPaths()))])', Rprofile);
                       writeLines(paste0('options(repos = \'', URL, '\')'), Rprofile);
                       close(Rprofile)"
-          Rscript -e "print(.libPaths())"
           Rscript -e "if(!'remotes' %in% rownames(utils::installed.packages())) utils::install.packages('remotes');
-                      remotes::install_cran(c('devtools'));
+                      remotes::install_cran(c('devtools'), dependencies = TRUE);
                       devtools::document()"
 
       - uses: r-lib/actions/setup-r-dependencies@v1
