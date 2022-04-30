@@ -59,16 +59,18 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
 
 # Public Methods ----------------------------------------------------------
 S3$set(which = "public", name = "initialize", overwrite = TRUE, value = function(
-    AWS_ACCESS_KEY_ID = Sys.getenv("AWS_ACCESS_KEY_ID"),
-    AWS_SECRET_ACCESS_KEY = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
-    AWS_REGION = Sys.getenv("AWS_REGION"),
-    verbose = FALSE){
+        AWS_ACCESS_KEY_ID = Sys.getenv("AWS_ACCESS_KEY_ID"),
+        AWS_SECRET_ACCESS_KEY = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
+        AWS_REGION = Sys.getenv("AWS_REGION"),
+        verbose = FALSE){
 
     stopifnot(nchar(AWS_ACCESS_KEY_ID) > 0, nchar(AWS_SECRET_ACCESS_KEY) > 0, nchar(AWS_REGION) > 0)
-    Sys.setenv(AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY, AWS_REGION = AWS_REGION)
-
+    withr::with_envvar(
+        list(AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY, AWS_REGION = AWS_REGION),
+        private$conn <- paws.storage::s3()
+    )
     private$verbose <- verbose
-    private$conn <- paws.storage::s3()
+
 
     private$events$FAILED_FINDING <- function(path) message("[\033[31mx\033[39m] Failed to find ", path)
     private$events$COPIED_FILE    <- function(path) message("[\033[32mv\033[39m] Copied ", path)

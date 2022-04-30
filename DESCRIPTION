@@ -22,4 +22,5 @@ Imports:
     httr,
     paws.storage,
     purrr,
-    stringr
+    stringr,
+    withr
