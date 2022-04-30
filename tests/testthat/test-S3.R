@@ -65,19 +65,13 @@ test_that("file_copy fails to copy a file from S3 to S3", {
 
 test_that("dir_copy copies a dir from local to S3", {
     s3 <- S3$new()
-    local_path <- fs::path(fs::path_temp(), "man")
-    fs::dir_create(local_path)
-    fs::file_create(local_path, "S3", ext = "md")
-
-    expect_type(s3$dir_copy(local_path, remote_dir, overwrite = TRUE), "character")
+    expect_type(s3$dir_copy(local_dir, remote_dir, overwrite = TRUE), "character")
 })
 
 test_that("dir_copy copies a dir from S3 to local", {
     s3 <- S3$new()
-    local_path <- fs::path(fs::path_temp(), "man")
-    fs::dir_delete(local_path)
-
-    expect_type(s3$dir_copy(remote_dir, local_path, overwrite = TRUE), "character")
+    fs::dir_delete(local_dir)
+    expect_type(s3$dir_copy(remote_dir, local_dir, overwrite = TRUE), "character")
 })
 
 test_that("file_exists finds a remote file", {
@@ -104,5 +98,3 @@ test_that("file_info fails when file doesn't exist", {
     nonexisting_remote_file <- fs::path_ext_set(remote_file, "xxx")
     expect_error(s3$file_info(nonexisting_remote_file))
 })
-
-
