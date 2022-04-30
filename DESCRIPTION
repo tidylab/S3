@@ -18,4 +18,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
-    fs
+    fs,
+    httr,
+    paws.storage,
+    purrr,
+    stringr
