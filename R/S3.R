@@ -18,7 +18,8 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
     #' @param AWS_ACCESS_KEY_ID (`character`) Specifies an AWS access key associated with an IAM user or role
     #' @param AWS_SECRET_ACCESS_KEY (`character`) Specifies the secret key associated with the access key. This is essentially the "password" for the access key.
     #' @param AWS_REGION  (`character`) Specifies the AWS Region to send the request to.
-    initialize = function(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, verbose = FALSE) { stop() },
+    #' @param access_control_list (`character`) What permission should new objects get? By default, all objects are private. Only the owner has full access control. For more information and options see \href{https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#CannedACL}{ACL Overview}.
+    initialize = function(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, access_control_list = "private", verbose = FALSE) { stop() },
     #' @description Construct path to a file or directory
     #' @param ... (`character`) Character vectors.
     path = function(...) { stop() },
@@ -53,6 +54,7 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
 ), private = list(
     conn = NULL,
     verbose = NULL,
+    ACL = NULL,
     events = new.env(),
     file_copy_from_remote_to_local = function(path, new_path) { stop() },
     file_copy_from_local_to_remote = function(path, new_path) { stop() }
@@ -64,6 +66,7 @@ S3$set(which = "public", name = "initialize", overwrite = TRUE, value = function
         AWS_ACCESS_KEY_ID = Sys.getenv("AWS_ACCESS_KEY_ID"),
         AWS_SECRET_ACCESS_KEY = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
         AWS_REGION = Sys.getenv("AWS_REGION"),
+        access_control_list = "private",
         verbose = FALSE){
 
     stopifnot(nchar(AWS_ACCESS_KEY_ID) > 0, nchar(AWS_SECRET_ACCESS_KEY) > 0, nchar(AWS_REGION) > 0)
@@ -72,7 +75,7 @@ S3$set(which = "public", name = "initialize", overwrite = TRUE, value = function
         private$conn <- paws.storage::s3()
     )
     private$verbose <- verbose
-
+    private$ACL <- access_control_list
 
     private$events$FAILED_FINDING <- function(path) message("[\033[31mx\033[39m] Failed to find ", path)
     private$events$COPIED_FILE    <- function(path) message("[\033[32mv\033[39m] Copied ", path)
@@ -180,7 +183,7 @@ S3$set(which = "private", name = "file_copy_from_local_to_remote", overwrite = T
     file_path <- self$path(new_path, basename(path))
 
     conn <- private$conn
-    conn$put_object(Bucket = bucket, Key = key, Body = as.character(path))
+    conn$put_object(ACL = private$ACL, Body = as.character(path), Bucket = bucket, Key = key)
 
     invisible(file_path)
 })
