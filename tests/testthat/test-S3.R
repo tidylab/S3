@@ -1,5 +1,5 @@
 # Setup -------------------------------------------------------------------
-local_dir   <- usethis::with_project(code = {getwd()})
+local_dir   <- getwd()
 local_file  <- fs::dir_ls(local_dir)[1]
 remote_dir  <- s3_test_dir
 remote_file <- paste0(remote_dir, basename(local_file))
