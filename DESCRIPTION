@@ -1,11 +1,15 @@
 Package: S3
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Amazon S3 File System Operations Based on 'libuv'
+Version: 0.0.0
+Date: 2022-04-22
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Harel", "Lustiger", , "tidylab@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2953-9598"))
+Description: A cross-platform interface to file system operations, built
+    on top of the 'libuv' C library.
 License: MIT + file LICENSE
+URL: https://tidylab.github.io/S3/, https://github.com/tidylab/S3
+BugReports: https://github.com/tidylab/S3/issues
 Suggests: 
     covr,
     testthat (>= 3.0.0)
