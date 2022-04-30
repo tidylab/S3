@@ -28,6 +28,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
+
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-pandoc@v1
@@ -37,6 +38,9 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+
+      - name: Set Up Session
+        run: echo "utils::chooseCRANmirror(graphics=FALSE, ind = 1)" > .Rprofile
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
