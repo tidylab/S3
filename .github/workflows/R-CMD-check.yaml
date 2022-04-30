@@ -19,9 +19,7 @@ jobs:
         config:
           - {os: macOS-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
-          # - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          # - {os: ubuntu-latest,   r: 'oldrel-1'}
+          - {os: ubuntu-latest,  r: 'release'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -40,12 +38,11 @@ jobs:
           use-public-rspm: true
 
       - name: Prepare Session
-        run: echo "utils::chooseCRANmirror(graphics=FALSE, ind = 1)" > .Rprofile
         run: |
-          if(!'remotes' %in% rownames(utils::installed.packages())) utils::install.packages('remotes');
-          remotes::install_cran(c('devtools'));
-          devtools::document()
-        shell: Rscript {0}
+          echo "utils::chooseCRANmirror(graphics=FALSE, ind = 1)" > .Rprofile
+          Rscript -e "if(!'remotes' %in% rownames(utils::installed.packages())) utils::install.packages('remotes');
+                      remotes::install_cran(c('devtools'));
+                      devtools::document()"
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
