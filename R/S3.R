@@ -19,7 +19,7 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
     #' @param AWS_SECRET_ACCESS_KEY (`character`) Specifies the secret key associated with the access key. This is essentially the "password" for the access key.
     #' @param AWS_REGION  (`character`) Specifies the AWS Region to send the request to.
     #' @param access_control_list (`character`) What permission should new objects get? By default, all objects are private. Only the owner has full access control. For more information and options see \href{https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#CannedACL}{ACL Overview}.
-    initialize = function(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, access_control_list = "private", verbose = FALSE) { stop() },
+    initialize = function(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, access_control_list = "private", verbose = TRUE) { stop() },
     #' @description Construct path to a file or directory
     #' @param ... (`character`) Character vectors.
     path = function(...) { stop() },
