@@ -57,7 +57,9 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
     ACL = NULL,
     events = new.env(),
     file_copy_from_remote_to_local = function(path, new_path) { stop() },
-    file_copy_from_local_to_remote = function(path, new_path) { stop() }
+    file_copy_from_local_to_remote = function(path, new_path) { stop() },
+    extract_bucket = function(path) { stop() },
+    extract_key = function(path) { stop() }
 ))
 
 
@@ -90,8 +92,8 @@ S3$set(which = "public", name = "dir_ls", overwrite = TRUE, value = function(pat
     stopifnot(self$is_dir(path))
 
     conn <- private$conn
-    bucket <- path |> httr::parse_url() |> purrr::pluck("hostname")
-    prefix <- path |> httr::parse_url() |> purrr::pluck("path")
+    bucket <- path |> private$extract_bucket()
+    prefix <- path |> private$extract_key()
 
     invisible(
         suffix <- conn$list_objects_v2(Bucket = bucket, Prefix = prefix)
@@ -165,8 +167,8 @@ S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(
 })
 
 S3$set(which = "private", name = "file_copy_from_remote_to_local", overwrite = TRUE, value = function(path, new_path){
-    bucket <- path |> httr::parse_url() |> purrr::pluck("hostname")
-    key <- path |> httr::parse_url() |> purrr::pluck("path")
+    bucket <- path |> private$extract_bucket()
+    key <- path |> private$extract_key()
     file_path <- fs::path(new_path, basename(path))
 
     conn <- private$conn
@@ -178,8 +180,8 @@ S3$set(which = "private", name = "file_copy_from_remote_to_local", overwrite = T
 })
 
 S3$set(which = "private", name = "file_copy_from_local_to_remote", overwrite = TRUE, value = function(path, new_path){
-    bucket <- new_path |> httr::parse_url() |> purrr::pluck("hostname")
-    key <- new_path |> httr::parse_url() |> purrr::pluck("path") |> fs::path(basename(path))
+    bucket <- new_path |> private$extract_bucket()
+    key <- new_path |> private$extract_key() |> fs::path(basename(path))
     file_path <- self$path(new_path, basename(path))
 
     conn <- private$conn
@@ -200,10 +202,10 @@ S3$set(which = "public", name = "file_size", overwrite = TRUE, value = function(
 })
 
 S3$set(which = "public", name = "file_info", overwrite = TRUE, value = function(path){
-    self$is_file(path)
+    stopifnot(self$is_file(path))
 
-    bucket <- path |> httr::parse_url() |> purrr::pluck("hostname")
-    key <- path |> httr::parse_url() |> purrr::pluck("path")
+    bucket <- path |> private$extract_bucket()
+    key <- path |> private$extract_key()
 
     conn <- private$conn
     head_object_safely <- purrr::safely(conn$head_object)
@@ -213,3 +215,16 @@ S3$set(which = "public", name = "file_info", overwrite = TRUE, value = function(
         error = function(e) stop(paste(path, "not found"), call. = FALSE)
     )
 })
+
+
+# Private Methods ---------------------------------------------------------
+S3$set(which = "private", name = "extract_bucket", overwrite = TRUE, value = function(path){
+    stopifnot(self$is_file(path) | self$is_dir(path))
+    return(path |> httr::parse_url() |> purrr::pluck("hostname"))
+})
+
+S3$set(which = "private", name = "extract_key", overwrite = TRUE, value = function(path){
+    stopifnot(self$is_file(path) | self$is_dir(path))
+    return(path |> httr::parse_url() |> purrr::pluck("path"))
+})
+
