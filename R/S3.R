@@ -129,7 +129,7 @@ S3$set(which = "public", name = "dir_copy", overwrite = TRUE, value = function(p
     if(fs::is_absolute_path(new_path)) fs::dir_create(new_path)
 
     if(self$is_dir(path) & fs::is_dir(new_path)){
-        files <- self$dir_ls(path)[-1]
+        files <- self$dir_ls(path)
     } else if (self$is_dir(new_path) & fs::is_dir(path)) {
         files <- fs::dir_ls(path)
     } else {
@@ -146,17 +146,21 @@ S3$set(which = "public", name = "dir_copy", overwrite = TRUE, value = function(p
 S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(path, new_path, overwrite = FALSE){
     if(self$is_file(path) & fs::is_dir(new_path)){
         file_copy <- private$file_copy_from_remote_to_local
-        file_exists <- fs::file_exists
         file_path <- fs::path
+        target_file_exists <- fs::file_exists
+        source_file_exists <- self$file_exists
     } else if (self$is_dir(new_path) & fs::is_file(path)) {
         file_copy <- private$file_copy_from_local_to_remote
-        file_exists <- self$file_exists
         file_path <- self$path
+        target_file_exists <- self$file_exists
+        source_file_exists <- fs::file_exists
     } else {
         stop("file_copy only supports copying data from local to remote and vice-versa", call. = FALSE)
     }
 
-    if(overwrite | !file_exists(file_path(new_path, basename(path)))) {
+    if(!source_file_exists(path)) {
+        NULL
+    } else if(overwrite | !target_file_exists(file_path(new_path, basename(path)))) {
         file_copy(path, new_path)
         if(private$verbose) private$events$COPIED_FILE(basename(path))
     } else {
