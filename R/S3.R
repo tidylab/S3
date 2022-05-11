@@ -18,7 +18,8 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
     #' @param AWS_ACCESS_KEY_ID (`character`) Specifies an AWS access key associated with an IAM user or role
     #' @param AWS_SECRET_ACCESS_KEY (`character`) Specifies the secret key associated with the access key. This is essentially the "password" for the access key.
     #' @param AWS_REGION  (`character`) Specifies the AWS Region to send the request to.
-    initialize = function(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, verbose = FALSE) { stop() },
+    #' @param access_control_list (`character`) What permission should new objects get? By default, all objects are private. Only the owner has full access control. For more information and options see \href{https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#CannedACL}{ACL Overview}.
+    initialize = function(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, access_control_list = "private", verbose = TRUE) { stop() },
     #' @description Construct path to a file or directory
     #' @param ... (`character`) Character vectors.
     path = function(...) { stop() },
@@ -53,9 +54,12 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
 ), private = list(
     conn = NULL,
     verbose = NULL,
+    ACL = NULL,
     events = new.env(),
     file_copy_from_remote_to_local = function(path, new_path) { stop() },
-    file_copy_from_local_to_remote = function(path, new_path) { stop() }
+    file_copy_from_local_to_remote = function(path, new_path) { stop() },
+    extract_bucket = function(path) { stop() },
+    extract_key = function(path) { stop() }
 ))
 
 
@@ -64,6 +68,7 @@ S3$set(which = "public", name = "initialize", overwrite = TRUE, value = function
         AWS_ACCESS_KEY_ID = Sys.getenv("AWS_ACCESS_KEY_ID"),
         AWS_SECRET_ACCESS_KEY = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
         AWS_REGION = Sys.getenv("AWS_REGION"),
+        access_control_list = "private",
         verbose = FALSE){
 
     stopifnot(nchar(AWS_ACCESS_KEY_ID) > 0, nchar(AWS_SECRET_ACCESS_KEY) > 0, nchar(AWS_REGION) > 0)
@@ -72,7 +77,7 @@ S3$set(which = "public", name = "initialize", overwrite = TRUE, value = function
         private$conn <- paws.storage::s3()
     )
     private$verbose <- verbose
-
+    private$ACL <- access_control_list
 
     private$events$FAILED_FINDING <- function(path) message("[\033[31mx\033[39m] Failed to find ", path)
     private$events$COPIED_FILE    <- function(path) message("[\033[32mv\033[39m] Copied ", path)
@@ -87,8 +92,8 @@ S3$set(which = "public", name = "dir_ls", overwrite = TRUE, value = function(pat
     stopifnot(self$is_dir(path))
 
     conn <- private$conn
-    bucket <- path |> httr::parse_url() |> purrr::pluck("hostname")
-    prefix <- path |> httr::parse_url() |> purrr::pluck("path")
+    bucket <- path |> private$extract_bucket()
+    prefix <- path |> private$extract_key()
 
     invisible(
         suffix <- conn$list_objects_v2(Bucket = bucket, Prefix = prefix)
@@ -124,7 +129,7 @@ S3$set(which = "public", name = "dir_copy", overwrite = TRUE, value = function(p
     if(fs::is_absolute_path(new_path)) fs::dir_create(new_path)
 
     if(self$is_dir(path) & fs::is_dir(new_path)){
-        files <- self$dir_ls(path)[-1]
+        files <- self$dir_ls(path)
     } else if (self$is_dir(new_path) & fs::is_dir(path)) {
         files <- fs::dir_ls(path)
     } else {
@@ -141,17 +146,21 @@ S3$set(which = "public", name = "dir_copy", overwrite = TRUE, value = function(p
 S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(path, new_path, overwrite = FALSE){
     if(self$is_file(path) & fs::is_dir(new_path)){
         file_copy <- private$file_copy_from_remote_to_local
-        file_exists <- fs::file_exists
         file_path <- fs::path
+        target_file_exists <- fs::file_exists
+        source_file_exists <- self$file_exists
     } else if (self$is_dir(new_path) & fs::is_file(path)) {
         file_copy <- private$file_copy_from_local_to_remote
-        file_exists <- self$file_exists
         file_path <- self$path
+        target_file_exists <- self$file_exists
+        source_file_exists <- fs::file_exists
     } else {
         stop("file_copy only supports copying data from local to remote and vice-versa", call. = FALSE)
     }
 
-    if(overwrite | !file_exists(file_path(new_path, basename(path)))) {
+    if(!source_file_exists(path)) {
+        NULL
+    } else if(overwrite | !target_file_exists(file_path(new_path, basename(path)))) {
         file_copy(path, new_path)
         if(private$verbose) private$events$COPIED_FILE(basename(path))
     } else {
@@ -162,8 +171,8 @@ S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(
 })
 
 S3$set(which = "private", name = "file_copy_from_remote_to_local", overwrite = TRUE, value = function(path, new_path){
-    bucket <- path |> httr::parse_url() |> purrr::pluck("hostname")
-    key <- path |> httr::parse_url() |> purrr::pluck("path")
+    bucket <- path |> private$extract_bucket()
+    key <- path |> private$extract_key()
     file_path <- fs::path(new_path, basename(path))
 
     conn <- private$conn
@@ -175,12 +184,12 @@ S3$set(which = "private", name = "file_copy_from_remote_to_local", overwrite = T
 })
 
 S3$set(which = "private", name = "file_copy_from_local_to_remote", overwrite = TRUE, value = function(path, new_path){
-    bucket <- new_path |> httr::parse_url() |> purrr::pluck("hostname")
-    key <- new_path |> httr::parse_url() |> purrr::pluck("path") |> fs::path(basename(path))
+    bucket <- new_path |> private$extract_bucket()
+    key <- new_path |> private$extract_key() |> fs::path(basename(path))
     file_path <- self$path(new_path, basename(path))
 
     conn <- private$conn
-    conn$put_object(Bucket = bucket, Key = key, Body = as.character(path))
+    conn$put_object(ACL = private$ACL, Body = as.character(path), Bucket = bucket, Key = key)
 
     invisible(file_path)
 })
@@ -197,10 +206,10 @@ S3$set(which = "public", name = "file_size", overwrite = TRUE, value = function(
 })
 
 S3$set(which = "public", name = "file_info", overwrite = TRUE, value = function(path){
-    self$is_file(path)
+    stopifnot(self$is_file(path))
 
-    bucket <- path |> httr::parse_url() |> purrr::pluck("hostname")
-    key <- path |> httr::parse_url() |> purrr::pluck("path")
+    bucket <- path |> private$extract_bucket()
+    key <- path |> private$extract_key()
 
     conn <- private$conn
     head_object_safely <- purrr::safely(conn$head_object)
@@ -210,3 +219,16 @@ S3$set(which = "public", name = "file_info", overwrite = TRUE, value = function(
         error = function(e) stop(paste(path, "not found"), call. = FALSE)
     )
 })
+
+
+# Private Methods ---------------------------------------------------------
+S3$set(which = "private", name = "extract_bucket", overwrite = TRUE, value = function(path){
+    stopifnot(self$is_file(path) | self$is_dir(path))
+    return(path |> httr::parse_url() |> purrr::pluck("hostname"))
+})
+
+S3$set(which = "private", name = "extract_key", overwrite = TRUE, value = function(path){
+    stopifnot(self$is_file(path) | self$is_dir(path))
+    return(path |> httr::parse_url() |> purrr::pluck("path"))
+})
+

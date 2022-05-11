@@ -1,6 +1,6 @@
 Package: S3
 Title: Amazon S3 File System Operations Based on 'libuv'
-Version: 0.1.0
+Version: 0.1.2
 Date: 2022-04-22
 Authors@R: 
     person("Harel", "Lustiger", , "tidylab@gmail.com", role = c("aut", "cre"),
@@ -10,13 +10,6 @@ Description: A cross-platform interface to file system operations, built
 License: MIT + file LICENSE
 URL: https://tidylab.github.io/S3/, https://github.com/tidylab/S3
 BugReports: https://github.com/tidylab/S3/issues
-Suggests: 
-    covr,
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
 Imports: 
     fs,
     httr,
@@ -24,3 +17,10 @@ Imports:
     purrr,
     stringr,
     withr
+Suggests: 
+    covr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
