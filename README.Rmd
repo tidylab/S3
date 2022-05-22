@@ -1,59 +1,37 @@
 ---
 output: github_document
+link-citations: yes
+editor_options: 
+  canonical: true
+  markdown: 
+    wrap: 80
+    references: 
+      location: section
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
+```{r setup, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE}
+source(file.path(usethis::proj_get(), "vignettes",  "_common.R"))
 ```
 
-# S3
+# `S3` <img src="https://raw.githubusercontent.com/tidylab/S3/master/pkgdown/logo.png" align="right" style="float:right; height:75px"/>
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/S3)](https://CRAN.R-project.org/package=S3)
-[![Codecov test coverage](https://codecov.io/gh/tidylab/S3/branch/master/graph/badge.svg)](https://app.codecov.io/gh/tidylab/S3?branch=master)
+
 [![R-CMD-check](https://github.com/tidylab/S3/workflows/R-CMD-check/badge.svg)](https://github.com/tidylab/S3/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/tidylab/S3/branch/master/graph/badge.svg)](https://codecov.io/gh/tidylab/S3?branch=master)
+
 <!-- badges: end -->
 
-The goal of S3 is to ...
+## Overview
+
+`r read.dcf("DESCRIPTION", "Description")[[1]]`
 
 ## Installation
 
-You can install the development version of S3 from [GitHub](https://github.com/) with:
+You can install `S3` by using:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("tidylab/S3")
+```{r, eval=FALSE, echo=TRUE}
+install.packages("remotes")
+remotes::install_github("tidylab/S3")
 ```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example, eval=FALSE}
-library(S3)
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.

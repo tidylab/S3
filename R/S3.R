@@ -79,7 +79,8 @@ S3$set(which = "public", name = "initialize", overwrite = TRUE, value = function
     private$verbose <- verbose
     private$ACL <- access_control_list
 
-    private$events$FAILED_FINDING <- function(path) message("[\033[31mx\033[39m] Failed to find ", path)
+    private$events$UNSUPPORTED_CASE <- function(name) stop("[\033[31mx\033[39m] ", name, " is unsupported", call. = FALSE)
+    private$events$FAILED_FINDING <- function(path) stop("[\033[31mx\033[39m] Failed to find ", path, call. = FALSE)
     private$events$COPIED_FILE    <- function(path) message("[\033[32mv\033[39m] Copied ", path)
     private$events$SKIPPED_FILE   <- function(path) message("[\033[34mi\033[39m] Skipped ", path)
 
@@ -129,38 +130,59 @@ S3$set(which = "public", name = "dir_copy", overwrite = TRUE, value = function(p
     if(fs::is_absolute_path(new_path)) fs::dir_create(new_path)
 
     if(self$is_dir(path) & fs::is_dir(new_path)){
-        files <- self$dir_ls(path)
+        dir_ls <- self$dir_ls
+        file_exists <- self$file_exists
     } else if (self$is_dir(new_path) & fs::is_dir(path)) {
-        files <- fs::dir_ls(path)
+        file_exists <- fs::file_exists
+        dir_ls <- fs::dir_ls
     } else {
-        stop("dir_copy only supports copying data from local to remote and vice-versa", call. = FALSE)
+        private$events$UNSUPPORTED_CASE("coping a dir from local to local, or from remote to remote")
     }
 
-    for(path in files) {
-        self$file_copy(path, new_path, overwrite)
+    for(from in dir_ls(path)) {
+        if(!file_exists(from)) next
+        self$file_copy(from, new_path, overwrite)
     }
 
     invisible(new_path)
 })
 
 S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(path, new_path, overwrite = FALSE){
-    if(self$is_file(path) & fs::is_dir(new_path)){
-        file_copy <- private$file_copy_from_remote_to_local
-        file_path <- fs::path
-        target_file_exists <- fs::file_exists
-        source_file_exists <- self$file_exists
-    } else if (self$is_dir(new_path) & fs::is_file(path)) {
-        file_copy <- private$file_copy_from_local_to_remote
-        file_path <- self$path
-        target_file_exists <- self$file_exists
-        source_file_exists <- fs::file_exists
-    } else {
-        stop("file_copy only supports copying data from local to remote and vice-versa", call. = FALSE)
-    }
+    ## Assertions
+    assert_that(
+        assertthat::is.scalar(overwrite), assertthat::is.flag(overwrite),
+        assertthat::is.scalar(path), assertthat::is.string(path),
+        assertthat::is.scalar(new_path), assertthat::is.string(new_path)
+    )
 
-    if(!source_file_exists(path)) {
-        NULL
-    } else if(overwrite | !target_file_exists(file_path(new_path, basename(path)))) {
+    remote_file_exist <- self$file_exists(path)
+    local_file_exist <- fs::file_exists(path)
+    if(isFALSE(remote_file_exist) & isFALSE(local_file_exist)) private$events$FAILED_FINDING(path)
+
+    ## Define Functions
+    source_type <- if(self$is_file(path)) "remote" else if(fs::is_file(path)) "local" else stop("Invalid `path`")
+    target_type <- if(self$is_dir(new_path)) "remote" else if(fs::is_dir(new_path)) "local" else stop("Invalid `new_path`")
+    case <- paste0(source_type,2,target_type)
+    switch(case,
+           remote2local = {
+               file_copy <- private$file_copy_from_remote_to_local
+               file_path <- fs::path
+               target_file_exists <- fs::file_exists
+               source_file_exists <- self$file_exists
+           },
+           local2remote = {
+               file_copy <- private$file_copy_from_local_to_remote
+               file_path <- self$path
+               target_file_exists <- self$file_exists
+               source_file_exists <- fs::file_exists
+           },
+           {
+               private$events$UNSUPPORTED_CASE("coping a file from local to local, or from remote to remote")
+           }
+    )
+
+    ## Copy file
+    if(overwrite | !target_file_exists(file_path(new_path, basename(path)))) {
         file_copy(path, new_path)
         if(private$verbose) private$events$COPIED_FILE(basename(path))
     } else {

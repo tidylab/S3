@@ -60,7 +60,11 @@ test_that("file_copy copies a file from S3 to local", {
 
 test_that("file_copy fails to copy a file from S3 to S3", {
     s3 <- S3$new(verbose = FALSE)
+    non_existing_local_file <- fs::path(local_dir, "file452047e24959.csv")
+    non_existing_remote_file <- s3$path(remote_dir, "file452047e24959.csv")
     expect_error(s3$file_copy(remote_file, remote_dir, overwrite = FALSE))
+    expect_error(s3$file_copy(non_existing_local_file, remote_dir, overwrite = FALSE))
+    expect_error(s3$file_copy(non_existing_remote_file, local_dir, overwrite = FALSE))
 })
 
 test_that("dir_copy copies a dir from local to S3", {
@@ -98,3 +102,4 @@ test_that("file_info fails when file doesn't exist", {
     nonexisting_remote_file <- fs::path_ext_set(remote_file, "xxx")
     expect_error(s3$file_info(nonexisting_remote_file))
 })
+
