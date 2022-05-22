@@ -1,6 +1,6 @@
 Package: S3
 Title: Amazon S3 File System Operations Based on 'libuv'
-Version: 0.1.2
+Version: 0.1.3
 Date: 2022-04-22
 Authors@R: 
     person("Harel", "Lustiger", , "tidylab@gmail.com", role = c("aut", "cre"),
