@@ -11,6 +11,7 @@ License: MIT + file LICENSE
 URL: https://tidylab.github.io/S3/, https://github.com/tidylab/S3
 BugReports: https://github.com/tidylab/S3/issues
 Imports: 
+    assertthat,
     fs,
     httr,
     paws.storage,
