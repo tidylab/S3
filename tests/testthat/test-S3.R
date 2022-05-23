@@ -89,7 +89,7 @@ test_that("file_exists finds a remote file", {
 
 test_that("file_size returns file size", {
     s3 <- S3$new(verbose = FALSE)
-    expect_type(s3$file_size(remote_file), "double")
+    expect_s3_class(s3$file_size(remote_file), "fs_bytes")
 })
 
 test_that("file_info returns file metedata", {
