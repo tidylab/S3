@@ -1,48 +1,3 @@
-# Setup -------------------------------------------------------------------
-local_dir   <- fs::file_temp("S3-")
-local_file  <- fs::path(local_dir, "dummy", ext = "R")
-remote_dir  <- s3_test_dir
-remote_file <- paste0(remote_dir, basename(local_file))
-
-fs::dir_create(local_dir)
-fs::file_create(local_file)
-
-
-# Constructor -------------------------------------------------------------
-test_that("S3 constructor works", {
-    expect_s3_class(s3 <- S3$new(verbose = FALSE), "R6")
-})
-
-
-# Path manipulation -------------------------------------------------------
-test_that("is_dir detects S3 dir paths", {
-    s3 <- S3$new(verbose = FALSE)
-    expect_false(s3$is_dir(local_dir))
-    expect_true(s3$is_dir(remote_dir))
-})
-
-test_that("is_file detects S3 file paths", {
-    s3 <- S3$new(verbose = FALSE)
-    expect_false(s3$is_file(local_file))
-    expect_true(s3$is_file(remote_file))
-})
-
-test_that("path constructs S3 paths", {
-    s3 <- S3$new(verbose = FALSE)
-    expect_identical(
-        s3$path(remote_dir, "sub-folder-name", "file-name.csv"),
-        paste0(remote_dir, "sub-folder-name/file-name.csv")
-    )
-})
-
-
-# Directory manipulation --------------------------------------------------
-test_that("dir_ls the names of the files within the S3 bucket", {
-    s3 <- S3$new(verbose = FALSE)
-    expect_type(s3$dir_ls(remote_dir), "character")
-})
-
-
 # File manipulation -------------------------------------------------------
 test_that("file_copy copies a file from local to S3", {
     s3 <- S3$new(verbose = FALSE)
@@ -102,4 +57,3 @@ test_that("file_info fails when file doesn't exist", {
     nonexisting_remote_file <- fs::path_ext_set(remote_file, "xxx")
     expect_error(s3$file_info(nonexisting_remote_file))
 })
-
