@@ -1,5 +1,8 @@
 #' @title Events
 #' @export
+#'
+#' @family fs
+#'
 #' @examples
 #' print(ls(events))
 events <- new.env()
