@@ -10,7 +10,6 @@ s3$file_copy(local_file, remote_dir)
 fs::file_delete(local_file)
 
 
-are_files_synced <- isTRUE(as.integer(s3$file_size(remote_file)) == as.integer(fs::file_size(local_file)))
 
 #' cases:
 #' 1) Files are synced --> do nothing
@@ -18,6 +17,11 @@ are_files_synced <- isTRUE(as.integer(s3$file_size(remote_file)) == as.integer(f
 #' 3) Remote file is ahead --> copy remote file to local
 
 local_file_metadata <- fs::file_info(local_file)
-remote_file_metadata <- s3$file_info(remote_file1)
+remote_file_metadata <- s3$file_info(remote_file)
+
+
+dplyr::bind_rows(local = local_file_metadata, remote = remote_file_metadata, .id = "source")
+
+# are_files_synced <- isTRUE(as.integer(s3$file_size(remote_file)) == as.integer(fs::file_size(local_file)))
 
 # if(isFALSE(are_files_synced)) s3$file_copy(remote_file1, local_path, overwrite = TRUE)
