@@ -155,7 +155,7 @@ S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(
 
 
     ## Define Functions
-    source_type <- if(self$is_file(path)) "remote" else if(fs::is_file(path)) "local" else stop(path, "is an invalid `path`")
+    source_type <- if(self$is_file(path)) "remote" else if(fs::is_file(path)) "local" else stop(path, " is an invalid `path`")
     target_type <- if(self$is_dir(new_path)) "remote" else if(fs::is_dir(new_path)) "local" else stop("Invalid `new_path`")
     case <- paste0(source_type,2,target_type)
     switch(case,
@@ -214,7 +214,7 @@ S3$set(which = "private", name = "file_copy_from_local_to_remote", overwrite = T
 })
 
 S3$set(which = "public", name = "file_exists", overwrite = TRUE, value = function(path){
-    nrow(self$file_info(path)) > 0
+    !is.na(self$file_info(path)$size)
 })
 
 S3$set(which = "public", name = "file_size", overwrite = TRUE, value = function(path){
@@ -235,7 +235,10 @@ S3$set(which = "public", name = "file_info", overwrite = TRUE, value = function(
             size = head_object$ContentLength,
             modification_time = as.POSIXct(head_object$LastModified, origin = "1970-01-01", tz = "GMT")
         )
-        }, error = function(e) return(private$HeadObject())
+        }, error = function(e) return(private$HeadObject(
+            path = path,
+            size = NA_integer_
+        ))
     )
 
     return(head_object)

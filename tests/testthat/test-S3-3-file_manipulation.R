@@ -1,16 +1,14 @@
 # File manipulation -------------------------------------------------------
 test_that("file_copy copies a file from local to S3", {
     s3 <- S3$new(verbose = FALSE)
-    path <- local_file
-    new_path <- remote_dir
-    expect_type(s3$file_copy(path, new_path, overwrite = TRUE), "character")
+    fs::file_create(local_file)
+    expect_type(s3$file_copy(local_file, remote_dir, overwrite = TRUE), "character")
 })
 
 test_that("file_copy copies a file from S3 to local", {
     s3 <- S3$new(verbose = FALSE)
-    path <- remote_file
-    new_path <- fs::path_temp()
-    expect_type(s3$file_copy(path, new_path, overwrite = TRUE), "character")
+    fs::file_delete(local_file)
+    expect_type(s3$file_copy(remote_file, local_dir, overwrite = TRUE), "character")
 })
 
 test_that("file_copy fails to copy a file from S3 to S3", {
@@ -35,6 +33,10 @@ test_that("dir_copy copies a dir from S3 to local", {
 
 test_that("file_exists finds a remote file", {
     s3 <- S3$new(verbose = FALSE)
+    fs::file_create(local_file)
+    expect_type(s3$file_copy(local_file, remote_dir, overwrite = TRUE), "character")
+    fs::file_delete(local_file)
+
     existing_remote_file <- s3$path(remote_dir, basename(local_file))
     nonexisting_remote_file <- s3$path(remote_dir, "narnia.csv")
 
@@ -42,20 +44,23 @@ test_that("file_exists finds a remote file", {
     expect_false(s3$file_exists(nonexisting_remote_file))
 })
 
+test_that("file_info returns file metedata", {
+    s3 <- S3$new(verbose = FALSE)
+    s3 <- S3$new(verbose = FALSE)
+    fs::file_create(local_file)
+    expect_type(s3$file_copy(local_file, remote_dir, overwrite = TRUE), "character")
+    fs::file_delete(local_file)
+
+    existing_remote_file <- s3$path(remote_dir, basename(local_file))
+    nonexisting_remote_file <- s3$path(remote_dir, "narnia.csv")
+
+    expect_s3_class(s3$file_info(existing_remote_file), "data.frame")
+    expect_s3_class(s3$file_info(nonexisting_remote_file), "data.frame")
+})
+
 test_that("file_size returns file size", {
     s3 <- S3$new(verbose = FALSE)
     expect_s3_class(s3$file_size(remote_file), "fs_bytes")
-})
-
-test_that("file_info returns file metedata", {
-    s3 <- S3$new(verbose = FALSE)
-    expect_s3_class(s3$file_info(remote_file), "data.frame")
-})
-
-test_that("file_info fails when file doesn't exist", {
-    s3 <- S3$new(verbose = FALSE)
-    nonexisting_remote_file <- fs::path_ext_set(remote_file, "xxx")
-    expect_error(s3$file_info(nonexisting_remote_file))
 })
 
 test_that("file_delete deletes a file from S3", {
