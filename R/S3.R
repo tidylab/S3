@@ -55,7 +55,6 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
     conn = NULL,
     verbose = NULL,
     ACL = NULL,
-    events = new.env(),
     HeadObject = function(...) { stop() },
     file_copy_from_remote_to_local = function(path, new_path) { stop() },
     file_copy_from_local_to_remote = function(path, new_path) { stop() },
@@ -79,11 +78,6 @@ S3$set(which = "public", name = "initialize", overwrite = TRUE, value = function
     )
     private$verbose <- verbose
     private$ACL <- access_control_list
-
-    private$events$UNSUPPORTED_CASE <- function(name) stop("[\033[31mx\033[39m] ", name, " is unsupported", call. = FALSE)
-    private$events$FAILED_FINDING <- function(path) stop("[\033[31mx\033[39m] Failed to find ", path, call. = FALSE)
-    private$events$COPIED_FILE    <- function(path) message("[\033[32mv\033[39m] Copied ", path)
-    private$events$SKIPPED_FILE   <- function(path) message("[\033[34mi\033[39m] Skipped ", path)
 
     invisible()
 })
@@ -137,7 +131,7 @@ S3$set(which = "public", name = "dir_copy", overwrite = TRUE, value = function(p
         file_exists <- fs::file_exists
         dir_ls <- fs::dir_ls
     } else {
-        private$events$UNSUPPORTED_CASE("coping a dir from local to local, or from remote to remote")
+        events$UNSUPPORTED_CASE("coping a dir from local to local, or from remote to remote")
     }
 
     for(from in dir_ls(path)) {
@@ -163,30 +157,30 @@ S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(
     case <- paste0(source_type,2,target_type)
     switch(case,
            remote2local = {
-               if(isFALSE(self$file_exists(path))) private$events$FAILED_FINDING(path)
+               if(isFALSE(self$file_exists(path))) events$FAILED_FINDING(path)
                file_copy <- private$file_copy_from_remote_to_local
                file_path <- fs::path
                target_file_exists <- fs::file_exists
                source_file_exists <- self$file_exists
            },
            local2remote = {
-               if(isFALSE(fs::file_exists(path))) private$events$FAILED_FINDING(path)
+               if(isFALSE(fs::file_exists(path))) events$FAILED_FINDING(path)
                file_copy <- private$file_copy_from_local_to_remote
                file_path <- self$path
                target_file_exists <- self$file_exists
                source_file_exists <- fs::file_exists
            },
            {
-               private$events$UNSUPPORTED_CASE("coping a file from local to local, or from remote to remote")
+               events$UNSUPPORTED_CASE("coping a file from local to local, or from remote to remote")
            }
     )
 
     ## Copy file
     if(overwrite | !target_file_exists(file_path(new_path, basename(path)))) {
         file_copy(path, new_path)
-        if(private$verbose) private$events$COPIED_FILE(basename(path))
+        if(private$verbose) events$COPIED_FILE(basename(path))
     } else {
-        if(private$verbose) private$events$SKIPPED_FILE(basename(path))
+        if(private$verbose) events$SKIPPED_FILE(basename(path))
     }
 
     invisible(new_path)
