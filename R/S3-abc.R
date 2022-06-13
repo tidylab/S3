@@ -12,7 +12,7 @@
 #' \href{https://fs.r-lib.org/reference/index.html}{`fs`}.
 #'
 #' @export
-S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
+S3 <- R6::R6Class(classname = "FileSystemModule", cloneable = FALSE, public = list(
     # Public Methods ----------------------------------------------------------
     #' @description Instantiate an S3 object
     #' @param AWS_ACCESS_KEY_ID (`character`) Specifies an AWS access key associated with an IAM user or role
@@ -50,7 +50,10 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
     file_info = function(path) { stop() },
     #' @description Return file size in bytes
     #' @param path (`character`) A character vector of one or more paths.
-    file_size = function(path) { stop() }
+    file_size = function(path) { stop() },
+    #' @description Delete files
+    #' @param path (`character`) A character vector of one or more paths.
+    file_delete = function(path) { private$.file_delete(path); return(self) }
 ), private = list(
     conn = NULL,
     verbose = NULL,
@@ -152,7 +155,7 @@ S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(
 
 
     ## Define Functions
-    source_type <- if(self$is_file(path)) "remote" else if(fs::is_file(path)) "local" else stop("Invalid `path`")
+    source_type <- if(self$is_file(path)) "remote" else if(fs::is_file(path)) "local" else stop(path, "is an invalid `path`")
     target_type <- if(self$is_dir(new_path)) "remote" else if(fs::is_dir(new_path)) "local" else stop("Invalid `new_path`")
     case <- paste0(source_type,2,target_type)
     switch(case,

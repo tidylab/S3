@@ -57,3 +57,13 @@ test_that("file_info fails when file doesn't exist", {
     nonexisting_remote_file <- fs::path_ext_set(remote_file, "xxx")
     expect_error(s3$file_info(nonexisting_remote_file))
 })
+
+test_that("file_delete deletes a file from S3", {
+    s3 <- S3$new(verbose = FALSE)
+    fs::file_create(local_file)
+    remote_file <- s3$path(remote_dir, basename(local_file))
+
+    expect_type(s3$file_copy(local_file, remote_dir, overwrite = TRUE), "character")
+    expect_s3_class(s3$file_delete(remote_file), "FileSystemModule")
+    expect_error(s3$file_delete(remote_file), "Failed to remove")
+})
