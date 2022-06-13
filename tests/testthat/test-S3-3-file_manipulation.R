@@ -46,7 +46,6 @@ test_that("file_exists finds a remote file", {
 
 test_that("file_info returns file metedata", {
     s3 <- S3$new(verbose = FALSE)
-    s3 <- S3$new(verbose = FALSE)
     fs::file_create(local_file)
     expect_type(s3$file_copy(local_file, remote_dir, overwrite = TRUE), "character")
     fs::file_delete(local_file)
