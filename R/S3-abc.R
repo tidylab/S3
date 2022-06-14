@@ -12,7 +12,7 @@
 #' \href{https://fs.r-lib.org/reference/index.html}{`fs`}.
 #'
 #' @export
-S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
+S3 <- R6::R6Class(classname = "FileSystemModule", cloneable = FALSE, public = list(
     # Public Methods ----------------------------------------------------------
     #' @description Instantiate an S3 object
     #' @param AWS_ACCESS_KEY_ID (`character`) Specifies an AWS access key associated with an IAM user or role
@@ -29,6 +29,9 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
     #' @description Return the names of the files within the S3 bucket
     #' @param path (`character`) A path to a dir within an S3 bucket.
     is_dir = function(path) { stop() },
+    #' @description Check if a remote dir exists.
+    #' @param path (`character`) A character vector of one or more paths.
+    dir_exists = function(path) { private$.dir_exists(path) },
     #' @description Return the names of the files within the S3 bucket
     #' @param path (`character`) A path to S3 bucket
     dir_ls = function(path) { stop() },
@@ -44,19 +47,23 @@ S3 <- R6::R6Class(classname = "Adapter", cloneable = FALSE, public = list(
     file_copy = function(path, new_path, overwrite = FALSE) { stop() },
     #' @description Check if a remote file exists.
     #' @param path (`character`) A character vector of one or more paths.
-    file_exists = function(path) { stop() },
+    file_exists = function(path) { private$.file_exists(path) },
     #' @description Return file metadata
     #' @param path (`character`) A character vector of one or more paths.
     file_info = function(path) { stop() },
     #' @description Return file size in bytes
     #' @param path (`character`) A character vector of one or more paths.
-    file_size = function(path) { stop() }
+    file_size = function(path) { stop() },
+    #' @description Delete files
+    #' @param path (`character`) A character vector of one or more paths.
+    file_delete = function(path) { private$.file_delete(path); return(self) },
+    #' @description Delete Directories
+    #' @param path (`character`) A character vector of one or more paths.
+    dir_delete = function(path) { private$.dir_delete(path); return(self) }
 ), private = list(
     conn = NULL,
     verbose = NULL,
     ACL = NULL,
-    events = new.env(),
-    HeadObject = function(...) { stop() },
     file_copy_from_remote_to_local = function(path, new_path) { stop() },
     file_copy_from_local_to_remote = function(path, new_path) { stop() },
     extract_bucket = function(path) { stop() },
@@ -79,11 +86,6 @@ S3$set(which = "public", name = "initialize", overwrite = TRUE, value = function
     )
     private$verbose <- verbose
     private$ACL <- access_control_list
-
-    private$events$UNSUPPORTED_CASE <- function(name) stop("[\033[31mx\033[39m] ", name, " is unsupported", call. = FALSE)
-    private$events$FAILED_FINDING <- function(path) stop("[\033[31mx\033[39m] Failed to find ", path, call. = FALSE)
-    private$events$COPIED_FILE    <- function(path) message("[\033[32mv\033[39m] Copied ", path)
-    private$events$SKIPPED_FILE   <- function(path) message("[\033[34mi\033[39m] Skipped ", path)
 
     invisible()
 })
@@ -137,7 +139,7 @@ S3$set(which = "public", name = "dir_copy", overwrite = TRUE, value = function(p
         file_exists <- fs::file_exists
         dir_ls <- fs::dir_ls
     } else {
-        private$events$UNSUPPORTED_CASE("coping a dir from local to local, or from remote to remote")
+        events$UNSUPPORTED_CASE("coping a dir from local to local, or from remote to remote")
     }
 
     for(from in dir_ls(path)) {
@@ -158,35 +160,35 @@ S3$set(which = "public", name = "file_copy", overwrite = TRUE, value = function(
 
 
     ## Define Functions
-    source_type <- if(self$is_file(path)) "remote" else if(fs::is_file(path)) "local" else stop("Invalid `path`")
+    source_type <- if(self$is_file(path)) "remote" else if(fs::is_file(path)) "local" else stop(path, " is an invalid `path`")
     target_type <- if(self$is_dir(new_path)) "remote" else if(fs::is_dir(new_path)) "local" else stop("Invalid `new_path`")
     case <- paste0(source_type,2,target_type)
     switch(case,
            remote2local = {
-               if(isFALSE(self$file_exists(path))) private$events$FAILED_FINDING(path)
+               if(isFALSE(self$file_exists(path))) events$FAILED_FINDING(path)
                file_copy <- private$file_copy_from_remote_to_local
                file_path <- fs::path
                target_file_exists <- fs::file_exists
                source_file_exists <- self$file_exists
            },
            local2remote = {
-               if(isFALSE(fs::file_exists(path))) private$events$FAILED_FINDING(path)
+               if(isFALSE(fs::file_exists(path))) events$FAILED_FINDING(path)
                file_copy <- private$file_copy_from_local_to_remote
                file_path <- self$path
                target_file_exists <- self$file_exists
                source_file_exists <- fs::file_exists
            },
            {
-               private$events$UNSUPPORTED_CASE("coping a file from local to local, or from remote to remote")
+               events$UNSUPPORTED_CASE("coping a file from local to local, or from remote to remote")
            }
     )
 
     ## Copy file
     if(overwrite | !target_file_exists(file_path(new_path, basename(path)))) {
         file_copy(path, new_path)
-        if(private$verbose) private$events$COPIED_FILE(basename(path))
+        if(private$verbose) events$COPIED_FILE(basename(path))
     } else {
-        if(private$verbose) private$events$SKIPPED_FILE(basename(path))
+        if(private$verbose) events$SKIPPED_FILE(basename(path))
     }
 
     invisible(new_path)
@@ -216,10 +218,6 @@ S3$set(which = "private", name = "file_copy_from_local_to_remote", overwrite = T
     invisible(file_path)
 })
 
-S3$set(which = "public", name = "file_exists", overwrite = TRUE, value = function(path){
-    nrow(self$file_info(path)) > 0
-})
-
 S3$set(which = "public", name = "file_size", overwrite = TRUE, value = function(path){
     self$file_info(path)$size
 })
@@ -232,13 +230,16 @@ S3$set(which = "public", name = "file_info", overwrite = TRUE, value = function(
 
     head_object <- tryCatch({
         head_object <- private$conn$head_object(Bucket = bucket, Key = key) |> purrr::flatten_dfr()
-        private$HeadObject(
+        FileInfo(
             path = path,
             type = head_object$ContentType,
             size = head_object$ContentLength,
             modification_time = as.POSIXct(head_object$LastModified, origin = "1970-01-01", tz = "GMT")
         )
-        }, error = function(e) return(private$HeadObject())
+        }, error = function(e) return(FileInfo(
+            path = path,
+            size = NA_integer_
+        ))
     )
 
     return(head_object)
@@ -254,52 +255,4 @@ S3$set(which = "private", name = "extract_bucket", overwrite = TRUE, value = fun
 S3$set(which = "private", name = "extract_key", overwrite = TRUE, value = function(path){
     stopifnot(self$is_file(path) | self$is_dir(path))
     return(path |> httr::parse_url() |> purrr::pluck("path"))
-})
-
-
-# Value Objects -----------------------------------------------------------
-S3$set(which = "private", name = "HeadObject", overwrite = TRUE, value = function(
-        path              = NA_character_,
-        type              = factor(NA_character_),
-        size              = fs::fs_bytes(NA_integer_),
-        permissions       = fs::fs_perms(NA_integer_),
-        modification_time = as.POSIXct(NA),
-        user              = NA_character_,
-        group             = NA_character_,
-        device_id         = NA_real_,
-        hard_links        = NA_real_,
-        special_device_id = NA_real_,
-        inode             = NA_real_,
-        block_size        = NA_real_,
-        blocks            = NA_real_,
-        flags             = NA_integer_,
-        generation        = NA_real_,
-        access_time       = as.POSIXct(NA),
-        change_time       = as.POSIXct(NA),
-        birth_time        = as.POSIXct(NA)
-){
-    as_datetime <- function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "UTC")
-
-    head_object <- tibble::tibble(
-        path              = as.character(path),
-        type              = factor(type),
-        size              = fs::fs_bytes(size),
-        permissions       = fs::fs_perms(permissions),
-        modification_time = as_datetime(modification_time),
-        user              = as.character(user),
-        group             = as.character(group),
-        device_id         = as.numeric(device_id),
-        hard_links        = as.numeric(hard_links),
-        special_device_id = as.numeric(special_device_id),
-        inode             = as.numeric(inode),
-        block_size        = as.numeric(block_size),
-        blocks            = as.numeric(blocks),
-        flags             = as.integer(flags),
-        generation        = as.numeric(generation),
-        access_time       = as_datetime(access_time),
-        change_time       = as_datetime(change_time),
-        birth_time        = as_datetime(birth_time)
-    )
-
-    return(head_object[!is.na(head_object$path),])
 })
