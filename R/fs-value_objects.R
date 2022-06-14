@@ -50,7 +50,7 @@ FileInfo <- function(
         change_time       = as.POSIXct(NA),
         birth_time        = as.POSIXct(NA)
 ){
-    as_datetime <- function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "UTC")
+    as_datetime <- function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "")
 
     head_object <- tibble::tibble(
         path              = as.character(path),
