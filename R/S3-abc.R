@@ -29,6 +29,9 @@ S3 <- R6::R6Class(classname = "FileSystemModule", cloneable = FALSE, public = li
     #' @description Return the names of the files within the S3 bucket
     #' @param path (`character`) A path to a dir within an S3 bucket.
     is_dir = function(path) { stop() },
+    #' @description Check if a remote dir exists.
+    #' @param path (`character`) A character vector of one or more paths.
+    dir_exists = function(path) { private$.dir_exists(path) },
     #' @description Return the names of the files within the S3 bucket
     #' @param path (`character`) A path to S3 bucket
     dir_ls = function(path) { stop() },

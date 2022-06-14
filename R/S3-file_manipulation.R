@@ -31,3 +31,6 @@ S3$set(which = "private", name = ".file_exists", overwrite = TRUE, value = funct
     !is.na(self$file_info(path)$size)
 })
 
+S3$set(which = "private", name = ".dir_exists", overwrite = TRUE, value = function(path){
+    isTRUE(length(self$dir_ls(path)) > 0)
+})
