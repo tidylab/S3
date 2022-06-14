@@ -53,7 +53,10 @@ S3 <- R6::R6Class(classname = "FileSystemModule", cloneable = FALSE, public = li
     file_size = function(path) { stop() },
     #' @description Delete files
     #' @param path (`character`) A character vector of one or more paths.
-    file_delete = function(path) { private$.file_delete(path); return(self) }
+    file_delete = function(path) { private$.file_delete(path); return(self) },
+    #' @description Delete Directories
+    #' @param path (`character`) A character vector of one or more paths.
+    dir_delete = function(path) { private$.dir_delete(path); return(self) }
 ), private = list(
     conn = NULL,
     verbose = NULL,
