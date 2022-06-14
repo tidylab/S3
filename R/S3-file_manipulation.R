@@ -1,3 +1,4 @@
+# Create files, directories, or links -------------------------------------
 S3$set(which = "private", name = ".file_delete", overwrite = TRUE, value = function(path){
     if(!self$file_exists(path)) events$FAILED_REMOVING_FILE(path)
 
@@ -23,3 +24,10 @@ S3$set(which = "private", name = ".dir_delete", overwrite = TRUE, value = functi
 
     return(path)
 })
+
+
+# Query for existence and access permissions ------------------------------
+S3$set(which = "private", name = ".file_exists", overwrite = TRUE, value = function(path){
+    !is.na(self$file_info(path)$size)
+})
+

@@ -44,7 +44,7 @@ S3 <- R6::R6Class(classname = "FileSystemModule", cloneable = FALSE, public = li
     file_copy = function(path, new_path, overwrite = FALSE) { stop() },
     #' @description Check if a remote file exists.
     #' @param path (`character`) A character vector of one or more paths.
-    file_exists = function(path) { stop() },
+    file_exists = function(path) { private$.file_exists(path) },
     #' @description Return file metadata
     #' @param path (`character`) A character vector of one or more paths.
     file_info = function(path) { stop() },
@@ -213,10 +213,6 @@ S3$set(which = "private", name = "file_copy_from_local_to_remote", overwrite = T
     conn$put_object(ACL = private$ACL, Body = as.character(path), Bucket = bucket, Key = key)
 
     invisible(file_path)
-})
-
-S3$set(which = "public", name = "file_exists", overwrite = TRUE, value = function(path){
-    !is.na(self$file_info(path)$size)
 })
 
 S3$set(which = "public", name = "file_size", overwrite = TRUE, value = function(path){
