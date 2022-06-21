@@ -85,11 +85,19 @@ test_that("file_delete deletes a file from S3", {
     expect_error(s3$file_delete(remote_file), "no such file or directory")
 })
 
-# test_that("dir_delete deletes a dir from S3", {
-#     s3 <- S3$new(verbose = FALSE)
-#     fs::file_create(local_file)
-#     remote_file <- s3$path(remote_dir, basename(local_file))
-#
-#     expect_s3_class(s3$dir_delete(remote_dir), "FileSystemModule")
-#     expect_error(s3$dir_delete(remote_dir), "no such file or directory")
-# })
+test_that("file_move moves a file", {
+    s3 <- S3$new(verbose = FALSE)
+    fs::file_create(local_file)
+    expect_no_error(s3$file_copy(local_file, remote_dir, overwrite = TRUE), "character")
+
+    path <- s3$path(remote_dir, basename(local_file))
+    new_path <- s3$path(remote_dir, "recycle-bin", basename(local_file))
+
+    expect_true(s3$file_exists(path))
+    expect_false(s3$file_exists(new_path))
+
+    expect_true(s3$file_move(path, new_path))
+
+    # expect_false(s3$file_exists(path))
+    # expect_true(s3$file_exists(new_path))
+})
