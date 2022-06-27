@@ -2,6 +2,8 @@
 #'
 #' @description Implement a uniform interface to file system operations for AWS S3.
 #'
+#' @param path (`character`) A character vector of one or more paths.
+#'
 #' @examples
 #' \dontrun{
 #' s3 <- S3$new(AWS_REGION = "ap-southeast-2")
@@ -20,6 +22,29 @@ S3 <- R6::R6Class(classname = "FileSystemModule", cloneable = FALSE, public = li
     #' @param AWS_REGION  (`character`) Specifies the AWS Region to send the request to.
     #' @param access_control_list (`character`) What permission should new objects get? By default, all objects are private. Only the owner has full access control. For more information and options see \href{https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#CannedACL}{ACL Overview}.
     initialize = function(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, access_control_list = "private", verbose = TRUE) { stop() },
+    #' @description Copy file form local path to a S3 and vice versa
+    #' @param new_path (`character`) A character vector of paths to the new locations.
+    #' @param overwrite (`logical`) Overwrite files if they exist. If this is `FALSE` and the file exists an error will be thrown.
+    file_copy = function(path, new_path, overwrite = FALSE) { stop() },
+    #' @description Copy directory form local path to a S3 and vice versa
+    #' @param new_path (`character`) A character vector of paths to the new locations.
+    #' @param overwrite (`logical`) Overwrite files if they exist. If this is `FALSE` and the file exists an error will be thrown.
+    dir_copy = function(path, new_path, overwrite = FALSE) { stop() },
+    #' @description Delete files
+    file_delete = function(path) { private$.file_delete(path); return(self) },
+    #' @description Delete Directories
+    dir_delete = function(path) { private$.dir_delete(path); return(self) },
+    #' @description Check if a remote file exists.
+    file_exists = function(path) { private$.file_exists(path) },
+    #' @description Check if a remote dir exists.
+    dir_exists = function(path) { private$.dir_exists(path) },
+    #' @description Return file metadata
+    file_info = function(path) { stop() },
+    #' @description Return file size in bytes
+    file_size = function(path) { stop() },
+    #' @description Move or rename files
+    #' @param new_path (`character`) New file path. If `new_path` is existing directory, the file will be moved into that directory; otherwise it will be moved/renamed to the full path. Should either be the same length as `path`, or a single directory.
+    file_move = function(path, new_path) { private$.file_move(path, new_path); return(self) },
     #' @description Construct path to a file or directory
     #' @param ... (`character`) Character vectors.
     path = function(...) { stop() },
@@ -29,37 +54,9 @@ S3 <- R6::R6Class(classname = "FileSystemModule", cloneable = FALSE, public = li
     #' @description Return the names of the files within the S3 bucket
     #' @param path (`character`) A path to a dir within an S3 bucket.
     is_dir = function(path) { stop() },
-    #' @description Check if a remote dir exists.
-    #' @param path (`character`) A character vector of one or more paths.
-    dir_exists = function(path) { private$.dir_exists(path) },
     #' @description Return the names of the files within the S3 bucket
     #' @param path (`character`) A path to S3 bucket
-    dir_ls = function(path) { stop() },
-    #' @description Copy directory form local path to a S3 and vice versa
-    #' @param path (`character`) A character vector of one or more paths.
-    #' @param new_path (`character`) A character vector of paths to the new locations.
-    #' @param overwrite (`logical`) Overwrite files if they exist. If this is `FALSE` and the file exists an error will be thrown.
-    dir_copy = function(path, new_path, overwrite = FALSE) { stop() },
-    #' @description Copy file form local path to a S3 and vice versa
-    #' @param path (`character`) A character vector of one or more paths.
-    #' @param new_path (`character`) A character vector of paths to the new locations.
-    #' @param overwrite (`logical`) Overwrite files if they exist. If this is `FALSE` and the file exists an error will be thrown.
-    file_copy = function(path, new_path, overwrite = FALSE) { stop() },
-    #' @description Check if a remote file exists.
-    #' @param path (`character`) A character vector of one or more paths.
-    file_exists = function(path) { private$.file_exists(path) },
-    #' @description Return file metadata
-    #' @param path (`character`) A character vector of one or more paths.
-    file_info = function(path) { stop() },
-    #' @description Return file size in bytes
-    #' @param path (`character`) A character vector of one or more paths.
-    file_size = function(path) { stop() },
-    #' @description Delete files
-    #' @param path (`character`) A character vector of one or more paths.
-    file_delete = function(path) { private$.file_delete(path); return(self) },
-    #' @description Delete Directories
-    #' @param path (`character`) A character vector of one or more paths.
-    dir_delete = function(path) { private$.dir_delete(path); return(self) }
+    dir_ls = function(path) { stop() }
 ), private = list(
     conn = NULL,
     verbose = NULL,

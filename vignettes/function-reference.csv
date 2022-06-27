@@ -1,0 +1,67 @@
+category,subcategory,name,S3
+File manipulation,"Copy files, directories or links",file_copy,v
+File manipulation,"Create files, directories, or links",file_create,v
+File manipulation,"Delete files, directories, or links",file_delete,v
+File manipulation,Change file permissions,file_chmod,
+File manipulation,Change owner or group of a file,file_chown,
+File manipulation,Query file metadata,file_info,v
+File manipulation,Query file metadata,file_size,v
+File manipulation,Move or rename files,file_move,v
+File manipulation,Open files or directories,file_show,
+File manipulation,Create names for temporary files,file_temp,
+File manipulation,Create names for temporary files,file_temp_push,
+File manipulation,Create names for temporary files,file_temp_pop,
+File manipulation,Change file access and modification times,file_touch,
+File manipulation,Query for existence and access permissions,file_exists,v
+File manipulation,Query for existence and access permissions,file_access,
+File manipulation,Query for existence and access permissions,file_exists,
+Directory manipulation,"Copy files, directories or links",dir_copy,v
+Directory manipulation,"Create files, directories, or links",dir_create,
+Directory manipulation,"Create files, directories, or links",dir_copy,v
+Directory manipulation,List files,dir_ls,v
+Directory manipulation,List files,dir_map,
+Directory manipulation,List files,dir_walk,
+Directory manipulation,List files,dir_info,
+Directory manipulation,Print contents of directories in a tree-like format,dir_tree,
+Directory manipulation,Query for existence and access permissions,dir_exists,
+Link manipulation,Query for existence and access permissions,link_exists,x
+Link manipulation,"Copy files, directories or links",link_copy,x
+Link manipulation,"Create files, directories, or links",link_create,x
+Link manipulation,"Delete files, directories, or links",link_delete,x
+Path manipulation,Create names for temporary files,path_temp,
+Path manipulation,Construct path to a file or directory,path,v
+Path manipulation,Construct path to a file or directory,path_wd,x
+Path manipulation,Test if a path is an absolute path,is_absolute_path,x
+Path manipulation,Finding the User Home Directory,path_expand,x
+Path manipulation,Finding the User Home Directory,path_expand_r,x
+Path manipulation,Finding the User Home Directory,path_home,x
+Path manipulation,Finding the User Home Directory,path_home_r,x
+Path manipulation,Manipulate file paths,path_file,
+Path manipulation,Manipulate file paths,path_dir,
+Path manipulation,Manipulate file paths,path_ext,
+Path manipulation,Manipulate file paths,path_ext_remove,
+Path manipulation,Manipulate file paths,path_ext_set,
+Path manipulation,Filter paths,path_filter,
+Path manipulation,Path computations,path_real,
+Path manipulation,Path computations,path_split,
+Path manipulation,Path computations,path_join,
+Path manipulation,Path computations,path_abs,
+Path manipulation,Path computations,path_norm,
+Path manipulation,Path computations,path_rel,
+Path manipulation,Path computations,path_common,
+Path manipulation,Path computations,path_has_parent,
+Path manipulation,Construct a path to a location within an installed or development package,path_package,
+Path manipulation,Sanitize a filename by removing directory paths and invalid characters,path_sanitize,
+Path manipulation,Tidy paths,path_tidy,
+Helpers,Functions to test for file types,is_file,v
+Helpers,Functions to test for file types,is_dir,v
+Helpers,Functions to test for file types,is_link,
+Helpers,Functions to test for file types,is_file_empty,
+Helpers,File paths,as_fs_path,
+Helpers,File paths,fs_path,
+Helpers,Human readable file sizes,as_fs_bytes,
+Helpers,Human readable file sizes,fs_bytes,
+Helpers,"Create, modify and view file permissions",as_fs_perms,
+Helpers,"Create, modify and view file permissions",fs_perms,
+System information,Lookup Users and Groups on a system,group_ids,
+System information,Lookup Users and Groups on a system,user_ids,
