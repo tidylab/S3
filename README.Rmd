@@ -10,7 +10,7 @@ editor_options:
 ---
 
 ```{r setup, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE}
-source(file.path(usethis::proj_get(), "vignettes",  "_common.R"))
+source(fs::path_wd( "vignettes",  "_common", ext = "R"))
 ```
 
 # `S3` <img src="https://raw.githubusercontent.com/tidylab/S3/master/pkgdown/logo.png" align="right" style="float:right; height:75px"/>
@@ -34,4 +34,24 @@ You can install `S3` by using:
 ```{r, eval=FALSE, echo=TRUE}
 install.packages("remotes")
 remotes::install_github("tidylab/S3")
+```
+
+## Features
+
+```{r, eval=TRUE, echo=FALSE, results='markup'}
+invisible(
+    references <- fs::path_wd("vignettes", "function-reference", ext = "csv")
+    |> read.csv(na.strings = "")
+    |> dplyr::transmute(
+        Category = stringr::str_to_sentence(category),
+        Subcategory = stringr::str_to_sentence(category),
+        Function = paste0("`", as.character(name), "`"),
+        S3 = dplyr::case_when(
+            S3 == "v" ~ sprintf("<span style='color: %s;'>%s</span>", "green",  "[v] Implemented"),
+            S3 == "x" ~ sprintf("<span style='color: %s;'>%s</span>", "red",    "[x] Irrelevant"),
+            TRUE      ~ sprintf("<span style='color: %s;'>%s</span>", "orange", "[-] Not Implemented"),
+        )
+    )
+)
+knitr::kable(references)
 ```
