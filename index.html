@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">S3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -86,6 +86,422 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"tidylab/S3"</span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="18%">
+<col width="18%">
+<col width="15%">
+<col width="46%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Category</th>
+<th align="left">Subcategory</th>
+<th align="left">Function</th>
+<th align="left">S3</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_copy</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_create</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_delete</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_chmod</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_chown</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_info</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_size</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_move</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_show</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_temp</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_temp_push</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_temp_pop</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_touch</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_exists</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_access</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">File manipulation</td>
+<td align="left">File manipulation</td>
+<td align="left"><code>file_exists</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_copy</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_create</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_copy</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_ls</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_map</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_walk</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_info</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_tree</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Directory manipulation</td>
+<td align="left">Directory manipulation</td>
+<td align="left"><code>dir_exists</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Link manipulation</td>
+<td align="left">Link manipulation</td>
+<td align="left"><code>link_exists</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Link manipulation</td>
+<td align="left">Link manipulation</td>
+<td align="left"><code>link_copy</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="even">
+<td align="left">Link manipulation</td>
+<td align="left">Link manipulation</td>
+<td align="left"><code>link_create</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Link manipulation</td>
+<td align="left">Link manipulation</td>
+<td align="left"><code>link_delete</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_temp</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_wd</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>is_absolute_path</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_expand</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_expand_r</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_home</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_home_r</code></td>
+<td align="left"><span style="color: red;">[x] Irrelevant</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_file</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_dir</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_ext</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_ext_remove</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_ext_set</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_filter</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_real</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_split</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_join</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_abs</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_norm</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_rel</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_common</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_has_parent</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_package</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_sanitize</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Path manipulation</td>
+<td align="left">Path manipulation</td>
+<td align="left"><code>path_tidy</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>is_file</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>is_dir</code></td>
+<td align="left"><span style="color: green;">[v] Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>is_link</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>is_file_empty</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>as_fs_path</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>fs_path</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>as_fs_bytes</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>fs_bytes</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>as_fs_perms</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">Helpers</td>
+<td align="left">Helpers</td>
+<td align="left"><code>fs_perms</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="odd">
+<td align="left">System information</td>
+<td align="left">System information</td>
+<td align="left"><code>group_ids</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+<tr class="even">
+<td align="left">System information</td>
+<td align="left">System information</td>
+<td align="left"><code>user_ids</code></td>
+<td align="left"><span style="color: orange;">[-] Not Implemented</span></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
   </div>
@@ -141,7 +557,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>
