@@ -38,20 +38,29 @@ remotes::install_github("tidylab/S3")
 
 ## Features
 
-```{r, eval=TRUE, echo=FALSE, results='markup'}
+```{r, eval=TRUE, echo=FALSE, results='asis'}
+text_col <- function(text, col) sprintf("<span style='color: %s;'>%s</span>", col, text) 
 invisible(
     references <- fs::path_wd("vignettes", "function-reference", ext = "csv")
     |> read.csv(na.strings = "")
     |> dplyr::transmute(
         Category = stringr::str_to_sentence(category),
-        Subcategory = stringr::str_to_sentence(category),
+        Description = stringr::str_to_sentence(subcategory),
         Function = paste0("`", as.character(name), "`"),
         S3 = dplyr::case_when(
-            S3 == "v" ~ sprintf("<span style='color: %s;'>%s</span>", "green",  "[v] Implemented"),
-            S3 == "x" ~ sprintf("<span style='color: %s;'>%s</span>", "red",    "[x] Irrelevant"),
-            TRUE      ~ sprintf("<span style='color: %s;'>%s</span>", "orange", "[-] Not Implemented"),
+            S3 == "v" ~ text_col("[v] Implemented", "green"),
+            S3 == "x" ~ text_col("[x] Irrelevant", "red"),
+            TRUE      ~ text_col("[-] Not Implemented", "orange")
         )
     )
 )
-knitr::kable(references)
+
+for(category in unique(references$Category)){ 
+    cat(paste0("**",category, " Functions**"))
+    print(knitr::kable(
+        references
+        |> dplyr::filter(Category == category)
+        |> dplyr::select(-Category)
+    ))
+}
 ```

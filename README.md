@@ -25,71 +25,98 @@ remotes::install_github("tidylab/S3")
 
 ## Features
 
-| Category               | Subcategory            | Function           | S3                                                        |
-|:-----------------------|:-----------------------|:-------------------|:----------------------------------------------------------|
-| File manipulation      | File manipulation      | `file_copy`        | <span style="color: green;">\[v\] Implemented</span>      |
-| File manipulation      | File manipulation      | `file_create`      | <span style="color: green;">\[v\] Implemented</span>      |
-| File manipulation      | File manipulation      | `file_delete`      | <span style="color: green;">\[v\] Implemented</span>      |
-| File manipulation      | File manipulation      | `file_chmod`       | <span style="color: orange;">\[-\] Not Implemented</span> |
-| File manipulation      | File manipulation      | `file_chown`       | <span style="color: orange;">\[-\] Not Implemented</span> |
-| File manipulation      | File manipulation      | `file_info`        | <span style="color: green;">\[v\] Implemented</span>      |
-| File manipulation      | File manipulation      | `file_size`        | <span style="color: green;">\[v\] Implemented</span>      |
-| File manipulation      | File manipulation      | `file_move`        | <span style="color: green;">\[v\] Implemented</span>      |
-| File manipulation      | File manipulation      | `file_show`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| File manipulation      | File manipulation      | `file_temp`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| File manipulation      | File manipulation      | `file_temp_push`   | <span style="color: orange;">\[-\] Not Implemented</span> |
-| File manipulation      | File manipulation      | `file_temp_pop`    | <span style="color: orange;">\[-\] Not Implemented</span> |
-| File manipulation      | File manipulation      | `file_touch`       | <span style="color: orange;">\[-\] Not Implemented</span> |
-| File manipulation      | File manipulation      | `file_exists`      | <span style="color: green;">\[v\] Implemented</span>      |
-| File manipulation      | File manipulation      | `file_access`      | <span style="color: orange;">\[-\] Not Implemented</span> |
-| File manipulation      | File manipulation      | `file_exists`      | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Directory manipulation | Directory manipulation | `dir_copy`         | <span style="color: green;">\[v\] Implemented</span>      |
-| Directory manipulation | Directory manipulation | `dir_create`       | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Directory manipulation | Directory manipulation | `dir_copy`         | <span style="color: green;">\[v\] Implemented</span>      |
-| Directory manipulation | Directory manipulation | `dir_ls`           | <span style="color: green;">\[v\] Implemented</span>      |
-| Directory manipulation | Directory manipulation | `dir_map`          | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Directory manipulation | Directory manipulation | `dir_walk`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Directory manipulation | Directory manipulation | `dir_info`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Directory manipulation | Directory manipulation | `dir_tree`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Directory manipulation | Directory manipulation | `dir_exists`       | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Link manipulation      | Link manipulation      | `link_exists`      | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Link manipulation      | Link manipulation      | `link_copy`        | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Link manipulation      | Link manipulation      | `link_create`      | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Link manipulation      | Link manipulation      | `link_delete`      | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Path manipulation      | Path manipulation      | `path_temp`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path`             | <span style="color: green;">\[v\] Implemented</span>      |
-| Path manipulation      | Path manipulation      | `path_wd`          | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Path manipulation      | Path manipulation      | `is_absolute_path` | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Path manipulation      | Path manipulation      | `path_expand`      | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Path manipulation      | Path manipulation      | `path_expand_r`    | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Path manipulation      | Path manipulation      | `path_home`        | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Path manipulation      | Path manipulation      | `path_home_r`      | <span style="color: red;">\[x\] Irrelevant</span>         |
-| Path manipulation      | Path manipulation      | `path_file`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_dir`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_ext`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_ext_remove`  | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_ext_set`     | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_filter`      | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_real`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_split`       | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_join`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_abs`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_norm`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_rel`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_common`      | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_has_parent`  | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_package`     | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_sanitize`    | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Path manipulation      | Path manipulation      | `path_tidy`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Helpers                | Helpers                | `is_file`          | <span style="color: green;">\[v\] Implemented</span>      |
-| Helpers                | Helpers                | `is_dir`           | <span style="color: green;">\[v\] Implemented</span>      |
-| Helpers                | Helpers                | `is_link`          | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Helpers                | Helpers                | `is_file_empty`    | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Helpers                | Helpers                | `as_fs_path`       | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Helpers                | Helpers                | `fs_path`          | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Helpers                | Helpers                | `as_fs_bytes`      | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Helpers                | Helpers                | `fs_bytes`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Helpers                | Helpers                | `as_fs_perms`      | <span style="color: orange;">\[-\] Not Implemented</span> |
-| Helpers                | Helpers                | `fs_perms`         | <span style="color: orange;">\[-\] Not Implemented</span> |
-| System information     | System information     | `group_ids`        | <span style="color: orange;">\[-\] Not Implemented</span> |
-| System information     | System information     | `user_ids`         | <span style="color: orange;">\[-\] Not Implemented</span> |
+**File manipulation Functions**
+
+| Description                                | Function         | S3                                                        |
+|:-------------------------------------------|:-----------------|:----------------------------------------------------------|
+| Copy files, directories or links           | `file_copy`      | <span style="color: green;">\[v\] Implemented</span>      |
+| Create files, directories, or links        | `file_create`    | <span style="color: green;">\[v\] Implemented</span>      |
+| Delete files, directories, or links        | `file_delete`    | <span style="color: green;">\[v\] Implemented</span>      |
+| Change file permissions                    | `file_chmod`     | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Change owner or group of a file            | `file_chown`     | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Query file metadata                        | `file_info`      | <span style="color: green;">\[v\] Implemented</span>      |
+| Query file metadata                        | `file_size`      | <span style="color: green;">\[v\] Implemented</span>      |
+| Move or rename files                       | `file_move`      | <span style="color: green;">\[v\] Implemented</span>      |
+| Open files or directories                  | `file_show`      | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Create names for temporary files           | `file_temp`      | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Create names for temporary files           | `file_temp_push` | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Create names for temporary files           | `file_temp_pop`  | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Change file access and modification times  | `file_touch`     | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Query for existence and access permissions | `file_exists`    | <span style="color: green;">\[v\] Implemented</span>      |
+| Query for existence and access permissions | `file_access`    | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Query for existence and access permissions | `file_exists`    | <span style="color: orange;">\[-\] Not Implemented</span> |
+
+**Directory manipulation Functions**
+
+| Description                                         | Function     | S3                                                        |
+|:----------------------------------------------------|:-------------|:----------------------------------------------------------|
+| Copy files, directories or links                    | `dir_copy`   | <span style="color: green;">\[v\] Implemented</span>      |
+| Create files, directories, or links                 | `dir_create` | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Create files, directories, or links                 | `dir_copy`   | <span style="color: green;">\[v\] Implemented</span>      |
+| List files                                          | `dir_ls`     | <span style="color: green;">\[v\] Implemented</span>      |
+| List files                                          | `dir_map`    | <span style="color: orange;">\[-\] Not Implemented</span> |
+| List files                                          | `dir_walk`   | <span style="color: orange;">\[-\] Not Implemented</span> |
+| List files                                          | `dir_info`   | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Print contents of directories in a tree-like format | `dir_tree`   | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Query for existence and access permissions          | `dir_exists` | <span style="color: orange;">\[-\] Not Implemented</span> |
+
+**Link manipulation Functions**
+
+| Description                                | Function      | S3                                                |
+|:-------------------------------------------|:--------------|:--------------------------------------------------|
+| Query for existence and access permissions | `link_exists` | <span style="color: red;">\[x\] Irrelevant</span> |
+| Copy files, directories or links           | `link_copy`   | <span style="color: red;">\[x\] Irrelevant</span> |
+| Create files, directories, or links        | `link_create` | <span style="color: red;">\[x\] Irrelevant</span> |
+| Delete files, directories, or links        | `link_delete` | <span style="color: red;">\[x\] Irrelevant</span> |
+
+**Path manipulation Functions**
+
+| Description                                                               | Function           | S3                                                        |
+|:--------------------------------------------------------------------------|:-------------------|:----------------------------------------------------------|
+| Create names for temporary files                                          | `path_temp`        | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Construct path to a file or directory                                     | `path`             | <span style="color: green;">\[v\] Implemented</span>      |
+| Construct path to a file or directory                                     | `path_wd`          | <span style="color: red;">\[x\] Irrelevant</span>         |
+| Test if a path is an absolute path                                        | `is_absolute_path` | <span style="color: red;">\[x\] Irrelevant</span>         |
+| Finding the user home directory                                           | `path_expand`      | <span style="color: red;">\[x\] Irrelevant</span>         |
+| Finding the user home directory                                           | `path_expand_r`    | <span style="color: red;">\[x\] Irrelevant</span>         |
+| Finding the user home directory                                           | `path_home`        | <span style="color: red;">\[x\] Irrelevant</span>         |
+| Finding the user home directory                                           | `path_home_r`      | <span style="color: red;">\[x\] Irrelevant</span>         |
+| Manipulate file paths                                                     | `path_file`        | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Manipulate file paths                                                     | `path_dir`         | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Manipulate file paths                                                     | `path_ext`         | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Manipulate file paths                                                     | `path_ext_remove`  | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Manipulate file paths                                                     | `path_ext_set`     | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Filter paths                                                              | `path_filter`      | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Path computations                                                         | `path_real`        | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Path computations                                                         | `path_split`       | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Path computations                                                         | `path_join`        | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Path computations                                                         | `path_abs`         | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Path computations                                                         | `path_norm`        | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Path computations                                                         | `path_rel`         | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Path computations                                                         | `path_common`      | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Path computations                                                         | `path_has_parent`  | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Construct a path to a location within an installed or development package | `path_package`     | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Sanitize a filename by removing directory paths and invalid characters    | `path_sanitize`    | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Tidy paths                                                                | `path_tidy`        | <span style="color: orange;">\[-\] Not Implemented</span> |
+
+**Helpers Functions**
+
+| Description                              | Function        | S3                                                        |
+|:-----------------------------------------|:----------------|:----------------------------------------------------------|
+| Functions to test for file types         | `is_file`       | <span style="color: green;">\[v\] Implemented</span>      |
+| Functions to test for file types         | `is_dir`        | <span style="color: green;">\[v\] Implemented</span>      |
+| Functions to test for file types         | `is_link`       | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Functions to test for file types         | `is_file_empty` | <span style="color: orange;">\[-\] Not Implemented</span> |
+| File paths                               | `as_fs_path`    | <span style="color: orange;">\[-\] Not Implemented</span> |
+| File paths                               | `fs_path`       | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Human readable file sizes                | `as_fs_bytes`   | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Human readable file sizes                | `fs_bytes`      | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Create, modify and view file permissions | `as_fs_perms`   | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Create, modify and view file permissions | `fs_perms`      | <span style="color: orange;">\[-\] Not Implemented</span> |
+
+**System information Functions**
+
+| Description                         | Function    | S3                                                        |
+|:------------------------------------|:------------|:----------------------------------------------------------|
+| Lookup users and groups on a system | `group_ids` | <span style="color: orange;">\[-\] Not Implemented</span> |
+| Lookup users and groups on a system | `user_ids`  | <span style="color: orange;">\[-\] Not Implemented</span> |
